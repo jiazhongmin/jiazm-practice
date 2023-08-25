@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Chat Example</title>
+</head>
+<body>
+    <h1>WebSocket Chat Example</h1>
+    <div id="output"></div>
+    <input type="text" id="messageInput" placeholder="Enter your message">
+    <button id="sendButton">Send</button>
+
+    <script>
+        const outputDiv = document.getElementById("output");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        // 创建 WebSocket 连接
+        const socket = new WebSocket("ws://127.0.0.1:8082/websocket/Websocket2");
+
+        // 在连接打开时执行
+        socket.onopen = (event) => {
+            writeToOutput("WebSocket connection opened.");
+        };
+
+        // 在接收到消息时执行
+        socket.onmessage = (event) => {
+            writeToOutput("Received message: " + event.data);
+        };
+
+        // 在连接关闭时执行
+        socket.onclose = (event) => {
+            writeToOutput("WebSocket connection closed.");
+        };
+
+        // 在发生错误时执行
+        socket.onerror = (event) => {
+            writeToOutput("WebSocket error: " + event.error);
+        };
+
+        // 发送消息到服务器
+        sendButton.addEventListener("click", () => {
+            const message = messageInput.value;
+            if (message) {
+                socket.send("{\"to\":\"Websocket1\",\"msg\":\""+message+"\"}");
+                writeToOutput("Sent message: " + message);
+                messageInput.value = ""; // 清空输入框
+            }
+        });
+
+        // 将消息写入页面输出
+        function writeToOutput(message) {
+            const newMessage = document.createElement("p");
+            newMessage.textContent = message;
+            outputDiv.appendChild(newMessage);
+        }
+    </script>
+</body>
+</html>

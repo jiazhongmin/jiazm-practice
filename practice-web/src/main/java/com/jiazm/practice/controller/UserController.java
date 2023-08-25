@@ -2,7 +2,7 @@ package com.jiazm.practice.controller;
 
 import com.jiazm.practice.service.UserService;
 import com.jiazm.practice.entity.User;
-import com.jiazm.practice.unit.R;
+import com.jiazm.practice.response.R;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

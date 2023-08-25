@@ -28,7 +28,5 @@ spring:
 logging:
   level:
     root: info
-    com.jiazm: debug
-cors:
-  allow:
-    ips: www.baidu.com,www.aaa.com
+    com.jiazm.practice: debug
+

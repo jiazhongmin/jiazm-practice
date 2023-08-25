@@ -1,4 +1,4 @@
-package com.jiazm.practice.config;
+package com.jiazm.practice.thread;
 
 import java.util.concurrent.*;
 

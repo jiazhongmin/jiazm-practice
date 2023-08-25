@@ -1,4 +1,4 @@
-package com.jiazm.practice.unit;
+package com.jiazm.practice.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
