@@ -91,7 +91,12 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.31_noneautotype</version>
         </dependency>
-
+        <!-- 微信支付V3 目前新版本-->
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-apache-httpclient</artifactId>
+            <version>0.4.7</version>
+        </dependency>
 
     </dependencies>
     <build>
