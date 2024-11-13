@@ -1,0 +1,47 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: test
+  application:
+    name: jiazm-practice
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  datasource:
+    dynamic:
+      #主数据源
+      primary: master
+      strict: false
+      datasource:
+        #pgsql数据源配置
+        master:
+          url: jdbc:mysql://182.92.110.105:3306/jiazm3_test?useUnicode=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+          username: jiazm3_test
+          password: ENC(s8JmcGF6czKUx00WSxx+cIAPh1jtK4d9)
+          #password: ld612522
+          type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 182.92.110.105
+    port: 6379
+    password: ENC(VyMvw5YxJOsfuHr08zf4zCs0HrjbUNFT)
+    #password: 7dxp7K4XW1q5
+    timeout: 5000
+    redisson:
+      pingConnectionInterval: 1000
+  autoconfigure:
+    exclude: org.redisson.spring.starter.RedissonAutoConfiguration
+
+logging:
+  level:
+    root: info
+    com.jiazm.practice: debug
+
+jasypt:
+  encryptor:
+    password: dmms
+    # 指定加密方式
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator

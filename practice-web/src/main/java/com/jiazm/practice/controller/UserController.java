@@ -1,13 +1,15 @@
 package com.jiazm.practice.controller;
 
-import com.jiazm.practice.service.UserService;
 import com.jiazm.practice.entity.User;
+import com.jiazm.practice.response.GeneralResponse;
 import com.jiazm.practice.response.R;
+import com.jiazm.practice.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,6 +27,7 @@ public class UserController {
     public static ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
 
     public static ConcurrentHashMap<String, Long> loginUserKey = new ConcurrentHashMap<>();
+
     @GetMapping("/login")
     public R login(String username, String password) {
         if (username == null) return R.fail("必须填写用户名");
@@ -41,6 +44,11 @@ public class UserController {
         return R.ok(String.valueOf(loginUserKey.get(username)));
     }
 
+    @GetMapping("/userList")
+    public GeneralResponse<List<User>> userList() {
+        return userService.userList();
+    }
+
     @RequestMapping("/logout")
     public R logout(String username) {
         loginUser.remove(username);
@@ -49,16 +57,17 @@ public class UserController {
     }
 
     @RequestMapping("/checkUserKey")
-    public R checkUserKey(String username, Long key){
-        if (username==null || key == null)return R.fail("用户校验异常");
-        if (!Objects.equals(loginUserKey.get(username), key)){
+    public R checkUserKey(String username, Long key) {
+        if (username == null || key == null) return R.fail("用户校验异常");
+        if (!Objects.equals(loginUserKey.get(username), key)) {
             return R.fail("用户在其他地方登录！！！");
         }
         return R.ok();
     }
 
+
     @RequestMapping("/loginUser")
-    public R loginUser(){
-        return R.ok("success",loginUser.keySet());
+    public R loginUser() {
+        return R.ok("success", loginUser.keySet());
     }
 }

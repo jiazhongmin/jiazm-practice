@@ -3,7 +3,6 @@ package com.jiazm.practice.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -23,9 +22,6 @@ public class GeneralResponse<T> implements Serializable {
     public static final Integer SUCCESS_STATUS = 200;
     public static final Integer ERROR_STATUS = 500;
 
-    @Serial
-    private static final long serialVersionUID = 7289310002935043203L;
-
     /**
      * 0为正常返回，>0为业务错误,<0为系统错误
      */
@@ -40,7 +36,7 @@ public class GeneralResponse<T> implements Serializable {
     /**
      * 内容
      */
-    private T result;
+    private T data;
 
 
     public GeneralResponse(Integer code, Integer status, String msg) {
@@ -49,18 +45,18 @@ public class GeneralResponse<T> implements Serializable {
         this.status = status;
     }
 
-    public GeneralResponse(Integer code, Integer status, String msg, T result) {
+    public GeneralResponse(Integer code, Integer status, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.status = status;
-        this.result = result;
+        this.data = data;
     }
 
-    public static GeneralResponse<Object> success(Object result) {
+    public static GeneralResponse success(Object result) {
         return new GeneralResponse<>(SUCCESS_CODE, SUCCESS_STATUS, SUCCESS_MSG, result);
     }
 
-    public static GeneralResponse<Object> error(String msg) {
+    public static GeneralResponse error(String msg) {
         return new GeneralResponse<>(ERROR_CODE, ERROR_STATUS, msg);
     }
 

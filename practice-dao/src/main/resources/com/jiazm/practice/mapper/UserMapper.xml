@@ -10,4 +10,7 @@
     <select id="queryByName" resultType="com.jiazm.practice.entity.User">
         select * from user where username = #{username}
     </select>
+    <select id="userList" resultType="com.jiazm.practice.entity.User">
+        select * from user
+    </select>
 </mapper>

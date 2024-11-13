@@ -2,6 +2,9 @@ package com.jiazm.practice.service;
 
 
 import com.jiazm.practice.entity.User;
+import com.jiazm.practice.response.GeneralResponse;
+
+import java.util.List;
 
 /**
  * @Author jiazhongmin
@@ -11,4 +14,6 @@ public interface UserService{
 
 
     User queryByName(String username);
+
+    GeneralResponse<List<User>> userList();
 }
