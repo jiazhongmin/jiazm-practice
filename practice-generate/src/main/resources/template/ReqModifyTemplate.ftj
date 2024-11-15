@@ -1,0 +1,27 @@
+package ${bussPackage}.req.${fullLowerName};
+
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * ${codeName}ModifyReq
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+public class ModifyReq {
+#foreach($item in $!{columnDatas})
+#if	($item.columnName !='create_time'&&$item.columnName !='createTime'
+	&&$item.columnName !='modify_time'&&$item.columnName !='modifyTime'
+	&&$item.columnName !='create_by'&&$item.columnName !='createBy'
+	&&$item.columnName !='modify_by'&&$item.columnName !='modifyBy'
+	&&$item.columnName !='is_deleted'&&$item.columnName !='isDeleted')
+	private ${item.dataType} ${item.columnName};
+#end
+#end
+
+}
+

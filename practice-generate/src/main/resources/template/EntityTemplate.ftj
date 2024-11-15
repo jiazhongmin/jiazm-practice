@@ -1,0 +1,20 @@
+package ${bussPackage}.entity;
+
+import lombok.Data;
+import java.math.BigDecimal;
+import java.util.Date;
+import lombok.Data;
+/**
+ * ${codeName}
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+public class ${className}{
+	#foreach($po in $!{columnDatas})
+    private ${po.dataType} ${po.columnName};
+    #end
+
+}
+

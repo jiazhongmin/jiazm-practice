@@ -10,4 +10,11 @@
     </parent>
 
     <artifactId>practice-dao</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.practice</groupId>
+            <artifactId>practice-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,0 +1,22 @@
+<template>
+  <le-detail :detailList="detailList" ></le-detail>
+</template>
+
+<script>
+import LeDetail from '@/le_components/LeDetail'
+import { language } from '@le_common/mixin'
+
+export default {
+  name: 'MyDetail',
+  mixins: [language],
+  components: {
+    LeDetail
+  },
+  data () {
+    return {
+      babelList: [], // 从lang包获取的要展示的字段
+      detailList: []// 列表详情数据
+    }
+  }
+}
+</script>

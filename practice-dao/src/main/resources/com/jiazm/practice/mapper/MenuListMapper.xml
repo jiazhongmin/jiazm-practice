@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiazm.practice.mapper.MenuListMapper">
+	<!-- Result Map -->
+	<resultMap id="ResultMap" type="com.jiazm.practice.entity.MenuList">
+		<result column="id" property="id" />
+		<result column="food_name" property="foodName" />
+		<result column="food_desc" property="foodDesc" />
+		<result column="food_level" property="foodLevel" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="modify_by" property="modifyBy" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_deleted" property="isDeleted" />
+	</resultMap>
+
+	<!-- menu_list 字段 -->
+	<sql id="Column_List">
+		menu_list.`id`,menu_list.`food_name`,menu_list.`food_desc`,menu_list.`food_level`,menu_list.`create_by`,menu_list.`create_time`,menu_list.`modify_by`,menu_list.`modify_time`,menu_list.`is_deleted`
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+			<if test="id != null">
+				and menu_list.`id` = #{id}
+			</if>
+			<if test="foodName != null and foodName != ''">
+				and menu_list.`food_name` = #{foodName}
+			</if>
+			<if test="foodDesc != null and foodDesc != ''">
+				and menu_list.`food_desc` = #{foodDesc}
+			</if>
+			<if test="foodLevel != null and foodLevel != ''">
+				and menu_list.`food_level` = #{foodLevel}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and menu_list.`create_by` = #{createBy}
+			</if>
+			<if test="createTime != null">
+				and menu_list.`create_time` = #{createTime}
+			</if>
+			<if test="modifyBy != null and modifyBy != ''">
+				and menu_list.`modify_by` = #{modifyBy}
+			</if>
+			<if test="modifyTime != null">
+				and menu_list.`modify_time` = #{modifyTime}
+			</if>
+			<if test="isDeleted != null">
+				and menu_list.`is_deleted` = #{isDeleted}
+			</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object">
+		<selectKey resultType="java.lang.String" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() 
+		</selectKey>
+		insert into menu_list(`food_name`,`food_desc`,`food_level`,`create_by`,`create_time`,`modify_by`,`modify_time`,`is_deleted`)	 values(#{foodName},#{foodDesc},#{foodLevel},#{createBy},#{createTime},#{modifyBy},#{modifyTime},#{isDeleted})
+	</insert>
+    <!-- 批量插入 -->
+	<insert id="insertList" parameterType="java.util.List">
+        INSERT INTO menu_list ("id","food_name","food_desc","food_level","create_by","create_time","modify_by","modify_time","is_deleted")
+        VALUES
+        <foreach collection="list" item="val" index="index" separator=",">
+            (#{val.id},#{val.foodName},#{val.foodDesc},#{val.foodLevel},#{val.createBy},#{val.createTime},#{val.modifyBy},#{val.modifyTime},#{val.isDeleted})
+        </foreach>
+    </insert>
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update menu_list set 	    <trim  suffixOverrides="," >	        <if test="foodName != null ">	            `food_name`=#{foodName},	        </if>	        <if test="foodDesc != null ">	            `food_desc`=#{foodDesc},	        </if>	        <if test="foodLevel != null ">	            `food_level`=#{foodLevel},	        </if>	        <if test="createBy != null ">	            `create_by`=#{createBy},	        </if>	        <if test="createTime != null ">	            `create_time`=#{createTime},	        </if>	        <if test="modifyBy != null ">	            `modify_by`=#{modifyBy},	        </if>	        <if test="modifyTime != null ">	            `modify_time`=#{modifyTime},	        </if>	        <if test="isDeleted != null ">	            `is_deleted`=#{isDeleted},	        </if>	    </trim> where `id`=#{id}
+	</update>
+	<!-- 逻辑删除记录 -->
+	<update id="isDelete" parameterType="Object">
+		update menu_list set is_deleted = 1 where id = #{id}
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="findById" resultMap="ResultMap" parameterType="Object">
+		select <include refid="Column_List" /> from menu_list where `id` = #{id}
+	</select>
+	<!-- 查询列表 -->
+	<select id="findList" resultMap="ResultMap"
+		parameterType="Object">
+		select 
+		<include refid="Column_List" />
+		from menu_list 
+		<include refid="Example_Where_Clause" />
+	    order by modify_time DESC
+	</select>
+	<select id = "selectByCondition"  resultMap="ResultMap" parameterType="com.jiazm.practice.req.menulist.ListReq">
+	    select * from menu_list where is_deleted = 0
+            <if test="req.foodNames != null and req.foodNames.size() > 0">
+                and menu_list.`food_name` in
+                <foreach item="item" collection="req.foodNames" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+            <if test="req.foodDescs != null and req.foodDescs.size() > 0">
+                and menu_list.`food_desc` in
+                <foreach item="item" collection="req.foodDescs" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+            <if test="req.foodLevels != null and req.foodLevels.size() > 0">
+                and menu_list.`food_level` in
+                <foreach item="item" collection="req.foodLevels" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+    order by modify_time DESC
+	</select>
+</mapper>   

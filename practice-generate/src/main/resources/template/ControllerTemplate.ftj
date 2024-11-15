@@ -1,0 +1,59 @@
+package ${bussPackage}.controller;
+
+import ${bussPackage}.service.${className}Service;
+import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.*;
+import ${bussPackage}.req.${fullLowerName}.*;
+import ${bussPackage}.vo.${fullLowerName}.*;
+import com.jiazm.practice.response.GeneralResponse;
+import javax.validation.Valid;
+
+import java.util.List;
+
+/**
+ * ${codeName} Controller
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@RestController
+@RequestMapping("/${lowerName}")
+public class ${className}Controller{
+
+	@Resource
+	private ${className}Service ${lowerName}Service;
+
+	/**
+	 * 更新数据
+	 *
+	 * @param req
+	 * @return
+	 */
+	@PostMapping(value = "/modify")
+	public GeneralResponse<String> modify(@RequestBody @Valid ModifyReq req) {
+		return ${lowerName}Service.modify(req);
+	}
+
+	/**
+	 * 列表数据
+	 *
+	 * @param req
+	 * @return
+	 */
+	@PostMapping("/list")
+	public GeneralResponse<${className}ListVo> list(@RequestBody @Valid ListReq req) {
+		return ${lowerName}Service.list(req);
+	}
+
+	/**
+      * 删除数据
+      *
+      * @param req
+      * @return
+     */
+    @PostMapping("/del")
+    public GeneralResponse<String> del(@RequestBody @Valid DeleteReq req) {
+    	return ${lowerName}Service.del(req);
+    }
+
+}

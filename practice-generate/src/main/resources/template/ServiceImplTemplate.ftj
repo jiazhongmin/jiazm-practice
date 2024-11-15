@@ -1,0 +1,108 @@
+package ${bussPackage}.service.Impl;
+
+import ${bussPackage}.entity.${className};
+import ${bussPackage}.mapper.${className}Mapper;
+import ${bussPackage}.service.${className}Service;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import ${bussPackage}.req.${fullLowerName}.*;
+import ${bussPackage}.vo.${fullLowerName}.*;
+import com.jiazm.practice.response.GeneralResponse;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Date;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import static com.github.pagehelper.page.PageMethod.offsetPage;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
+import com.jiazm.practice.commons.SetValueUtils;
+import com.jiazm.practice.exception.BaseException;
+import com.jiazm.practice.utils.CopyClass;
+#if ($uniqueIndexColumns)
+
+import java.math.BigDecimal;
+#end
+
+/**
+ * ${codeName} ServiceImpl
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Service("$!{lowerName}Service")
+@Slf4j
+public class ${className}ServiceImpl implements ${className}Service {
+
+	@Resource
+    private ${className}Mapper ${lowerName}Mapper;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public GeneralResponse<String> modify(ModifyReq req) {
+        //获取用户itCode
+        String itCode = "jiazm3";
+        Date date = new Date();
+        //验证是否存在条件匹配的数据
+        verifyDataExist(req);
+        if (Objects.nonNull(req.getId())) {
+            ${className} ${lowerName} = ${lowerName}Mapper.findById(req.getId());
+            ${className} ${lowerName}Update = new CopyClass<ModifyReq, ${className}>().copyBean(req, ${className}.class);
+            ${lowerName}Update.setId(${lowerName}.getId());
+            SetValueUtils.setMethodUpdateValVoid(${lowerName}Update, itCode, date);
+            ${lowerName}Mapper.update(${lowerName}Update);
+        } else {
+            ${className} ${lowerName}Add = new CopyClass<ModifyReq, ${className}>().copyBean(req, ${className}.class);
+            SetValueUtils.setMethodCreateValVoid(${lowerName}Add, itCode, date);
+            ${lowerName}Mapper.add(${lowerName}Add);
+        }
+        return GeneralResponse.success("modify success");
+    }
+
+    @Override
+    public GeneralResponse<${className}ListVo> list(ListReq req) {
+        ${className}ListVo vo = new ${className}ListVo();
+        if (Objects.nonNull(req.getPageNum()) && Objects.nonNull(req.getPageSize())) {
+            req.setPageNum((req.getPageNum() - 1) * req.getPageSize());
+        }
+        offsetPage(req.getPageNum(), req.getPageSize());
+        List<${className}> vos = ${lowerName}Mapper.selectByCondition(req);
+        PageInfo<${className}> pageInfo = new PageInfo<>(vos);
+        List<${className}Vo> ${lowerName}Vos = new CopyClass<${className}, ${className}Vo>().copyListNull(pageInfo.getList(), ${className}Vo.class);
+        vo.setList(${lowerName}Vos);
+        vo.setTotal((int) pageInfo.getTotal());
+        return GeneralResponse.success(vo);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public GeneralResponse<String> del(DeleteReq req) {
+        String itCode = "jiazm3";
+        Date date = new Date();
+        ${className} ${lowerName} = ${lowerName}Mapper.findById(req.getId());
+        SetValueUtils.setMethodDelValVoid(${lowerName}, itCode, date);
+        ${lowerName}Mapper.update(${lowerName});
+        return GeneralResponse.success("delete success");
+    }
+    private void verifyDataExist(ModifyReq req) {
+        ${className} find${className} = new ${className}();
+        //todo 添加条件
+        find${className}.setIsDeleted(0);
+        List<${className}> ${lowerName}List = ${lowerName}Mapper.findList(find${className});
+        if (Objects.isNull(req.getId())) {
+            if (CollectionUtils.isNotEmpty(${lowerName}List)) {
+                throw new BaseException("-999",  "这条记录已经存在!");
+            }
+        } else {
+            List<${className}> resultList = ${lowerName}List.stream().filter(${lowerName} -> !${lowerName}.getId().equals(req.getId())).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(resultList)) {
+                throw new BaseException("-999", "这条记录已经存在!");
+            }
+        }
+    }
+}

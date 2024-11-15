@@ -15,6 +15,7 @@
         <module>practice-service</module>
         <module>practice-web</module>
         <module>practice-start</module>
+        <module>practice-generate</module>
     </modules>
     <!--Spring-Boot 核心-->
     <parent>
@@ -52,6 +53,19 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.17</version>
         </dependency>
+        <!--PageHelper 分页-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+        <!--google guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.0.1-jre</version>
+            <scope>compile</scope>
+        </dependency>
         <!--mybatis plus-->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -81,6 +95,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
+        <!--collections4-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
         <!--fastjson-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -106,6 +126,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

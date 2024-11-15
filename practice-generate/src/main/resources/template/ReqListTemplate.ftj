@@ -1,0 +1,30 @@
+package ${bussPackage}.req.${fullLowerName};
+
+import javax.validation.constraints.NotNull;
+import lombok.Data;
+import java.util.List;
+/**
+ * ${codeName}ListReq
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+public class ListReq {
+#foreach($po in $!{columnDatas})
+#if	(
+    $po.columnName !='id'&&$po.columnName !='id'
+    &&$po.columnName !='create_time'&&$po.columnName !='createTime'
+	&&$po.columnName !='create_time'&&$po.columnName !='modifyTime'
+	&&$po.columnName !='createBy'&&$po.columnName !='modifyBy'
+	&&$po.columnName !='id'&&$po.columnName !='id'
+	&&$po.columnName !='is_deleted'&&$po.columnName !='isDeleted')
+	private List<${po.dataType}> ${po.columnName}s;
+#end
+#end
+    @NotNull(message = "页码不能为空")
+    private Integer pageNum;
+    @NotNull(message = "每页条数不能为空")
+    private Integer pageSize;
+}
+

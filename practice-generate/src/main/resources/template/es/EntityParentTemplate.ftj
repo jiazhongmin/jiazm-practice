@@ -1,0 +1,36 @@
+package ${bussPackage}.entity.parent;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import lombok.Data;
+
+import com.lenovo.gsc.tech.framework.elasticsearch.entity.BaseEsEntity;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+/**
+ * ${codeName} Entity
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+@Document(indexName = "${tableName}")
+public class ${className}Parent extends BaseEsEntity {
+	private static final long serialVersionUID = 1L;
+	
+#foreach($po in $!{columnDatas})
+#if	($po.columnName !='create_time'&&$po.columnName !='createTime'
+	&&$po.columnName !='create_time'&&$po.columnName !='modifyTime'
+	&&$po.columnName !='createBy'&&$po.columnName !='modifyBy'
+	&&$po.columnName !='id'&&$po.columnName !='id'
+	&&$po.columnName !='is_deleted'&&$po.columnName !='isDeleted')
+	/**
+	 * ${po.ColumnCommentLong}
+	 */
+    @Field("${po.columnDBName}")
+    private ${po.dataType} ${po.columnName};
+#end
+#end
+
+}
+

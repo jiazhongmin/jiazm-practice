@@ -1,0 +1,53 @@
+package ${bussPackage}.service.Impl;
+
+import com.lenovo.gsc.tech.framework.elasticsearch.service.impl.BaseEsServiceImpl;
+import ${bussPackage}.entity.${className}Entity;
+import ${bussPackage}.repository.${className}Repository;
+import ${bussPackage}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+#if ($uniqueIndexColumns)
+
+import java.math.BigDecimal;
+import java.util.Date;
+#end
+
+/**
+ * ${codeName} ServiceImpl
+ *
+ * @author lilong10
+ * @date ${dateTime}
+ * Copyright 2019 Lenovo GSC Technical Service
+ */
+@Service("$!{lowerName}Service")
+public class ${className}ServiceImpl extends BaseEsServiceImpl<${className}Entity, String> implements ${className}Service {
+
+	@Autowired
+    private ${className}Repository ${lowerName}Repository;
+
+    @Override
+	public ${className}Repository baseRepository() {
+		return ${lowerName}Repository;
+	}
+
+#if ($uniqueIndexColumns)
+#set($findParam = "")
+#set($findParam_ = "")
+#set($findMethod = "")
+#foreach($po in $!{uniqueIndexColumns})
+#set($findParam = $findParam + ", " + $po.dataType + " " + $po.columnName)
+#set($findParam_ = $findParam_ + ", " + $po.columnName)
+#set($findMethod = $findMethod + 'And' + $po.firstUpperColumnName)
+#end
+    @Override
+    public ${className}Entity findByUnique($findParam.substring(2)) {
+        return ${lowerName}Repository.findBy$findMethod.substring(3)($findParam_.substring(2));
+    }
+
+    @Override
+    public Long delByUnique($findParam.substring(2)) {
+        return ${lowerName}Repository.deleteBy$findMethod.substring(3)($findParam_.substring(2));
+    }
+
+#end
+}

@@ -1,0 +1,125 @@
+/**
+ * tableTitle---list页面--table表头
+ * title--表头
+ * dataIndex---列的关键字
+ * align--对齐方式
+ * width--宽度，可不设置，设置为固定值width: '100px'，则列的宽度固定
+ * sorter--排序，true/false
+ * **/
+const tableTitle = [
+    {
+        fixed: 'left'
+    },
+#foreach($po in $!{columnDatas})
+#if($po.columnName !='createTime'&&$po.columnName !='modifyTime'&&$po.columnName !='createBy'&&$po.columnName !='modifyBy'&&$po.columnName !='isDeleted'&&$po.columnName !='id')
+    {
+        title: '${po.columnComment}',
+        dataIndex: '${po.columnName}',
+        align: 'left',
+        width: 'auto',
+        sorter: true
+    },
+#end
+#end
+]
+
+/**
+ /**
+  * editAndDetail---edit和detail页面共用，form表单或详情的内容
+  * label--form表单的头名称
+  * decorator--form表单的字段
+  * required---是否必须 true/false
+  * type--类型--input，select，date 等
+  * maxlength--输入框的最大输入长度
+  * message--placeholder与message共用
+  * **/
+const editAndDetail = [
+#foreach($po in $!{columnDatas})
+#if($po.columnName !='createTime'&&$po.columnName !='modifyTime'&&$po.columnName !='createBy'&&$po.columnName !='modifyBy'&&$po.columnName !='isDeleted'&&$po.columnName !='id')
+    {
+        label: '${po.columnComment}',
+        decorator: '${po.columnName}',
+        required: true,
+        type:"input",
+#if($po.charMaxLength)
+        maxlength:${po.charMaxLength},
+#end
+        message: '请输入${po.columnComment}'
+    },
+#end
+#end
+]
+
+/**
+ * listForms---list页面的form表单的内容
+ *
+ * label--form表单的头名称
+ * decorator--form表单的字段
+ * required---是否必须 true/false
+ * type--类型--input，select，rangeSelect, date, rangeDate 等
+ * maxlength--输入框的最大输入长度
+ * message--placeholder与message共用
+ * parm:向下拉框接口传递的参数
+ * 如果是select(选择），则参考下方模板
+ * {
+    label: 'Country Code',
+    decorator: 'countryCode',
+    required: false,
+    type: 'select',
+    selectList: [],
+    parm: { code: 'b_...' },
+    message: 'Please select countryCode'
+  },
+ * 如果是rangeSelect（区间选择），则参考下方模板
+  // {
+  //   label: 'Status',
+  //   decorator: ['decorator1', 'decorator2'],
+  //   required: false,
+  //   type: 'rangeSelect',
+  //   selectList:[[],[]],
+  //   parm:[{ code:'b_...' },{ code:'b_...' }],
+  //   message: ['From', 'To']
+  // },
+ * **/
+const listForms = [
+#foreach($po in $!{columnDatas})
+#if($velocityCount==4)
+#break
+#end
+#if($po.columnName !='createTime'&&$po.columnName !='modifyTime'&&$po.columnName !='createBy'&&$po.columnName !='modifyBy'&&$po.columnName !='isDeleted'&&$po.columnName !='id')
+    {
+        label: '${po.columnComment}',
+        decorator: '${po.columnName}',
+        type:"input",
+#if($po.charMaxLength)
+        maxlength:${po.charMaxLength},
+#end
+        message: '请输入${po.columnComment}'
+    },
+#end
+#end
+]
+
+/**
+ * filterList---list页面的过滤器选项列表-根据需求添加
+ * 如果不需要过滤类表，则删除内部对象，const filterList = [] 即可
+ * title--表头
+ * dataIndex--表头关键字
+ * **/
+const filterList = [
+    {
+        title: 'test11',
+        dataIndex: 'test11'
+    },
+    {
+        title: 'test22',
+        dataIndex: 'test22'
+    }
+]
+
+export default {
+    listForms,
+    tableTitle,
+    filterList,
+    editAndDetail
+}

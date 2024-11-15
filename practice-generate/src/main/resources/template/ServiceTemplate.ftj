@@ -1,0 +1,40 @@
+package ${bussPackage}.service;
+import ${bussPackage}.req.${fullLowerName}.*;
+import ${bussPackage}.vo.${fullLowerName}.*;
+import com.jiazm.practice.response.GeneralResponse;
+import ${bussPackage}.entity.${className};
+#if ($uniqueIndexColumns)
+
+import java.math.BigDecimal;
+import java.util.Date;
+#end
+
+/**
+ * ${codeName} Service
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+public interface ${className}Service{
+    /**
+  	 * 更新数据
+  	 *
+  	 * @param req
+  	 * @return
+  	 */
+     GeneralResponse<String> modify(ModifyReq req);
+    /**
+  	 * 列表数据
+  	 *
+  	 * @param req
+  	 * @return
+  	 */
+     GeneralResponse<${className}ListVo> list(ListReq req);
+    /**
+  	 * 删除数据
+  	 *
+  	 * @param req
+  	 * @return
+  	 */
+     GeneralResponse<String> del(DeleteReq req);
+}

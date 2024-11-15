@@ -1,0 +1,16 @@
+package ${bussPackage}.req.${fullLowerName};
+
+import lombok.Data;
+
+/**
+ * ${codeName} Req
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+public class DeleteReq {
+	private Integer id;
+
+}
+

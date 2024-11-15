@@ -1,0 +1,34 @@
+package ${bussPackage}.sync.kafka.vo;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import lombok.Data;
+
+import com.lenovo.llsc.basic.sync.kafka.base.BaseSyncVO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+/**
+ * ${codeName} Sync VO
+ *
+ * @author lilong10
+ * @date ${dateTime}
+ * Copyright 2019 Lenovo GSC Technical Service
+ */
+@Data
+public class Sync${className}VO extends BaseSyncVO {
+	private static final long serialVersionUID = 1L;
+
+#foreach($po in $!{columnDatas})
+#if	($po.columnName !='create_time'&&$po.columnName !='createTime'
+	&&$po.columnName !='create_time'&&$po.columnName !='modifyTime'
+	&&$po.columnName !='createBy'&&$po.columnName !='modifyBy'
+	&&$po.columnName !='id'&&$po.columnName !='id'
+	&&$po.columnName !='is_deleted'&&$po.columnName !='isDeleted')
+	/**
+	 * ${po.ColumnCommentLong}
+	 */
+    private ${po.dataType} ${po.columnName};
+#end
+#end
+
+}
+

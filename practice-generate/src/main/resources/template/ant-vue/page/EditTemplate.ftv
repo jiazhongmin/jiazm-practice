@@ -1,0 +1,32 @@
+<template>
+  <le-forms
+    ref="myForms"
+    :title="title"
+    :detailList="detailList"
+    :babelList="babelList"
+    :showSubmitHideSave="showSubmitHideSave"
+    @save="save"></le-forms>
+</template>
+
+<script>
+import LeForms from '@/le_components/LeForms'
+import { language, addAndEdit } from '@le_common/mixin'
+
+export default {
+  name: 'MyEdit',
+  mixins: [language, addAndEdit],
+  components: {
+    LeForms
+  },
+  data () {
+    return {
+      babelList: [], // 从lang包获取的要展示的字段
+      detailList: [] // 列表详情数据
+    }
+  },
+  created () {
+    // 调用的是mixin.js的addAndEdit的changeLanguage()
+    this.changeLanguage()
+  }
+}
+</script>

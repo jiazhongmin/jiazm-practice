@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiazm.practice.mapper.FileResourceMapper">
+	<!-- Result Map -->
+	<resultMap id="ResultMap" type="com.jiazm.practice.entity.FileResource">
+		<result column="id" property="id" />
+		<result column="file_name" property="fileName" />
+		<result column="source_file_name" property="sourceFileName" />
+		<result column="file_path" property="filePath" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="modify_by" property="modifyBy" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_deleted" property="isDeleted" />
+	</resultMap>
+
+	<!-- file_resource 字段 -->
+	<sql id="Column_List">
+		file_resource.`id`,file_resource.`file_name`,file_resource.`source_file_name`,file_resource.`file_path`,file_resource.`create_by`,file_resource.`create_time`,file_resource.`modify_by`,file_resource.`modify_time`,file_resource.`is_deleted`
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+			<if test="id != null">
+				and file_resource.`id` = #{id}
+			</if>
+			<if test="fileName != null and fileName != ''">
+				and file_resource.`file_name` = #{fileName}
+			</if>
+			<if test="sourceFileName != null and sourceFileName != ''">
+				and file_resource.`source_file_name` = #{sourceFileName}
+			</if>
+			<if test="filePath != null and filePath != ''">
+				and file_resource.`file_path` = #{filePath}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and file_resource.`create_by` = #{createBy}
+			</if>
+			<if test="createTime != null">
+				and file_resource.`create_time` = #{createTime}
+			</if>
+			<if test="modifyBy != null and modifyBy != ''">
+				and file_resource.`modify_by` = #{modifyBy}
+			</if>
+			<if test="modifyTime != null">
+				and file_resource.`modify_time` = #{modifyTime}
+			</if>
+			<if test="isDeleted != null">
+				and file_resource.`is_deleted` = #{isDeleted}
+			</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object" useGeneratedKeys ="true"  keyProperty="id">
+		insert into file_resource(`file_name`,`source_file_name`,`file_path`,`create_by`,`create_time`,`modify_by`,`modify_time`,`is_deleted`)
+	 values(#{fileName},#{sourceFileName},#{filePath},#{createBy},#{createTime},#{modifyBy},#{modifyTime},#{isDeleted})
+	</insert>
+    <!-- 批量插入 -->
+	<insert id="insertList" parameterType="java.util.List">
+        INSERT INTO file_resource ("id","file_name","source_file_name","file_path","create_by","create_time","modify_by","modify_time","is_deleted")
+        VALUES
+        <foreach collection="list" item="val" index="index" separator=",">
+            (#{val.id},#{val.fileName},#{val.sourceFileName},#{val.filePath},#{val.createBy},#{val.createTime},#{val.modifyBy},#{val.modifyTime},#{val.isDeleted})
+        </foreach>
+    </insert>
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update file_resource set 
+	    <trim  suffixOverrides="," >
+	        <if test="fileName != null ">
+	            `file_name`=#{fileName},
+	        </if>
+	        <if test="sourceFileName != null ">
+	            `source_file_name`=#{sourceFileName},
+	        </if>
+	        <if test="filePath != null ">
+	            `file_path`=#{filePath},
+	        </if>
+	        <if test="createBy != null ">
+	            `create_by`=#{createBy},
+	        </if>
+	        <if test="createTime != null ">
+	            `create_time`=#{createTime},
+	        </if>
+	        <if test="modifyBy != null ">
+	            `modify_by`=#{modifyBy},
+	        </if>
+	        <if test="modifyTime != null ">
+	            `modify_time`=#{modifyTime},
+	        </if>
+	        <if test="isDeleted != null ">
+	            `is_deleted`=#{isDeleted},
+	        </if>
+	    </trim> where `id`=#{id}
+	</update>
+	<!-- 逻辑删除记录 -->
+	<update id="isDelete" parameterType="Object">
+		update file_resource set is_deleted = 1 where id = #{id}
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="findById" resultMap="ResultMap" parameterType="Object">
+		select <include refid="Column_List" /> from file_resource where `id` = #{id}
+	</select>
+	<!-- 查询列表 -->
+	<select id="findList" resultMap="ResultMap"
+		parameterType="Object">
+		select 
+		<include refid="Column_List" />
+		from file_resource 
+		<include refid="Example_Where_Clause" />
+	    order by modify_time DESC
+	</select>
+	<select id = "selectByCondition"  resultMap="ResultMap" parameterType="com.jiazm.practice.req.fileresource.ListReq">
+	    select * from file_resource where is_deleted = 0
+            <if test="req.fileNames != null and req.fileNames.size() > 0">
+                and file_resource.`file_name` in
+                <foreach item="item" collection="req.fileNames" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+            <if test="req.sourceFileNames != null and req.sourceFileNames.size() > 0">
+                and file_resource.`source_file_name` in
+                <foreach item="item" collection="req.sourceFileNames" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+            <if test="req.filePaths != null and req.filePaths.size() > 0">
+                and file_resource.`file_path` in
+                <foreach item="item" collection="req.filePaths" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+    order by modify_time DESC
+	</select>
+</mapper>   

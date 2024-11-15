@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${bussPackage}.mapper.${className}Mapper">
+	<!-- Result Map -->
+	<resultMap id="ResultMap" type="${bussPackage}.entity.$!{className}">
+#foreach($item in $!{columnDatas})
+		<result column="$!item.columnDBName" property="$item.columnName" />
+#end
+	</resultMap>
+
+	<!-- $!{tableName} 字段 -->
+	<sql id="Column_List">
+		$!{SQL.columnFields}
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+#foreach($item in $!{columnDatas})
+#set($testStr = $!item.columnName + " != null")
+#if($!item.dataType == 'String')
+#set($testStr = $!testStr + " and " + $!item.columnName + " != ''")
+#end
+			<if test="$!testStr">
+				and $!item.tbColumnDBName = #{$!item.columnName}
+			</if>
+#end
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object">
+#if ($databaseType=="mysql")
+		<selectKey resultType="java.lang.String" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() 
+		</selectKey>
+#end
+#if ($databaseType=="postgresql")
+		<selectKey resultType="java.lang.String" order="AFTER" keyProperty="id" >
+			SELECT currval('${tableName}_id_seq')
+		</selectKey>
+#end
+		$!{SQL.insert}
+	</insert>
+    <!-- 批量插入 -->
+	<insert id="insertList" parameterType="java.util.List">
+        INSERT INTO ${tableName} (#foreach($item in $!{columnDatas})"$!item.columnDBName"#if($velocityCount != $columnDatas.size()),#end#end)
+        VALUES
+        <foreach collection="list" item="val" index="index" separator=",">
+            (#foreach($item in $!{columnDatas})#{val.$item.columnName}#if($velocityCount != $columnDatas.size()),#end#end)
+        </foreach>
+    </insert>
+#if ($databaseType=="mysql"||$databaseType=="postgresql")
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		$!{SQL.updateById}
+	</update>
+#end
+	<!-- 逻辑删除记录 -->
+	<update id="isDelete" parameterType="Object">
+		update ${tableName} set is_deleted = 1 where id = #{id}
+	</update>
+
+#if ($databaseType=="mysql"||$databaseType=="postgresql")
+	<!-- 根据id查询 -->
+	<select id="findById" resultMap="ResultMap" parameterType="Object">
+		$!{SQL.selectById}
+	</select>
+#end
+	<!-- 查询列表 -->
+	<select id="findList" resultMap="ResultMap"
+		parameterType="Object">
+		select 
+		<include refid="Column_List" />
+		from ${tableName} 
+		<include refid="Example_Where_Clause" />
+	    order by modify_time DESC
+	</select>
+	<select id = "selectByCondition"  resultMap="ResultMap" parameterType="${bussPackage}.req.${fullLowerName}.ListReq">
+	    select * from ${tableName} where is_deleted = 0
+#foreach($item in $!{columnDatas})
+#if	(
+    $item.columnName !='id'&&$item.columnName !='id'
+    &&$item.columnName !='create_time'&&$item.columnName !='createTime'
+	&&$item.columnName !='modify_time'&&$item.columnName !='modifyTime'
+	&&$item.columnName !='create_by'&&$item.columnName !='createBy'
+	&&$item.columnName !='modify_by'&&$item.columnName !='modifyBy'
+	&&$item.columnName !='is_deleted'&&$item.columnName !='isDeleted')
+#set($testStr = "req."+$!item.columnName + "s != null and req." + $!item.columnName + "s.size() > 0")
+            <if test="$!testStr">
+                and $!item.tbColumnDBName in
+                <foreach item="item" collection="req.${item.columnName}s" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+#end
+#end
+    order by modify_time DESC
+	</select>
+</mapper>   

@@ -1,0 +1,47 @@
+package ${bussPackage}.repository;
+
+import com.lenovo.gsc.tech.framework.elasticsearch.repository.BaseEsRepository;
+import ${bussPackage}.entity.${className}Entity;
+#if ($uniqueIndexColumns)
+
+import java.math.BigDecimal;
+import java.util.Date;
+#end
+
+/**
+ * ${codeName} Repository
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+public interface ${className}Repository extends BaseEsRepository<${className}, String> {
+
+#if ($uniqueIndexColumns)
+#set($findParam = "")
+#set($findMethod = "")
+#foreach($po in $!{uniqueIndexColumns})
+#set($findParam = $findParam + ', ' + $po.dataType + " " + $po.columnName)
+#set($findMethod = $findMethod + 'And' + $po.firstUpperColumnName)
+#end
+    /**
+     * 根据唯一索引查询
+     *
+#foreach($po in $!{uniqueIndexColumns})
+     * @param ${po.columnName} ${po.ColumnCommentLong}
+#end
+     * @return
+     */
+    ${className}Entity findBy$findMethod.substring(3)($findParam.substring(2));
+
+    /**
+     * 根据唯一索引删除
+     *
+#foreach($po in $!{uniqueIndexColumns})
+     * @param ${po.columnName} ${po.ColumnCommentLong}
+#end
+     * @return
+     */
+    Long deleteBy$findMethod.substring(3)($findParam.substring(2));
+
+#end
+}

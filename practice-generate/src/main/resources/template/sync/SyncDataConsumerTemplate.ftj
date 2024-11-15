@@ -1,0 +1,43 @@
+package ${bussPackage}.sync.kafka.consumer;
+
+import com.lenovo.gsc.tech.framework.util.BeanUtil;
+import ${bussPackage}.sync.kafka.base.SyncBaseService;
+import ${bussPackage}.sync.kafka.vo.Sync${className}VO;
+import com.lenovo.llsc.commons.entity.${className}Entity;
+import com.lenovo.llsc.commons.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+/**
+ * Sync ${codeName} Kafka consumer
+ *
+ * @author lilong10
+ * @date ${dateTime}
+ * Copyright 2019 Lenovo GSC Technical Service
+ */
+@Component
+public class Sync${className}Consumer extends SyncBaseService<${className}Entity> {
+
+    @Autowired
+    private ${className}Service ${lowerName}Service;
+
+#set($dollar = "$")
+    @KafkaListener(topics = "${dollar}{datasync.topic-prefix:}${tableName}${dollar}{datasync.topic-suffix:}")
+    private void sync(Sync${className}VO ${lowerName}) {
+        // super.execute(${lowerName}Service, BeanUtil.clone(${lowerName}, ${className}Entity.class));
+        super.add(BeanUtil.clone(${lowerName}, ${className}Entity.class));
+    }
+
+#if ($uniqueIndexColumns)
+#set($findParam_ = "")
+#foreach($po in $!{uniqueIndexColumns})
+#set($findParam_ = $findParam_ + ", ${lowerName}.get" + $po.firstUpperColumnName + "()")
+#end
+    @Override
+    protected ${className}Entity findByUnique(${className}Entity ${lowerName}) {
+        return ${lowerName}Service.findByUnique($findParam_.substring(2));
+    }
+#end
+
+}

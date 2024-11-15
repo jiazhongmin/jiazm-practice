@@ -1,0 +1,28 @@
+<template>
+  <a-card :bordered="false" class="content">
+    <le-list-forms
+      ref="listForms"
+      :refs="$refs"
+      :filterList="filterList"
+      :detailList="detailList"
+      :babelList="babelList"
+      :tableName="tableName"
+    ></le-list-forms>
+
+    <le-table ref="leTable" :columns="columns" :tableName="tableName"></le-table>
+
+  </a-card>
+</template>
+<script>
+import LeListForms from '@/le_components/LeListForms'
+import LeTable from '@/le_components/LeTable'
+import { language } from '@le_common/mixin'
+export default {
+  name: 'TableList',
+  mixins: [language],
+  components: {
+    LeListForms,
+    LeTable
+  }
+}
+</script>

@@ -1,0 +1,29 @@
+package ${bussPackage}.vo.${fullLowerName};
+
+#foreach($po in $!{columnDatas})
+#if	($po.jsonName)
+import com.fasterxml.jackson.annotation.JsonProperty;
+#break
+#end
+#end
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * ${codeName} vo
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+public class ${className}Vo {
+	private static final long serialVersionUID = 1L;
+	
+#foreach($po in $!{columnDatas})
+	private ${po.dataType} ${po.columnName};
+#end
+
+}
+

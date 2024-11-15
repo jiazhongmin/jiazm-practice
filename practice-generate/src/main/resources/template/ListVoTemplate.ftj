@@ -1,0 +1,19 @@
+package ${bussPackage}.vo.${fullLowerName};
+
+import lombok.Data;
+import java.util.List;
+
+/**
+ * ${codeName}ListVo
+ *
+ * @author jiazm3
+ * @date ${dateTime}
+ */
+@Data
+public class ${className}ListVo{
+
+	private List<${className}Vo> list;
+	private Integer total;
+
+}
+
