@@ -100,19 +100,20 @@ public class FileResourceServiceImpl implements FileResourceService {
         String uploadPath = "/images/";
         String itCode = "jiazm3";
         Date date = new Date();
+        String fileType = FileUtils.getFileType(file);
+        String fileName = file.getOriginalFilename();
+        FileResource fileResource = new FileResource();
+        fileResource.setFilePath(uploadPath);
+        fileResource.setSourceFileName(fileName);
+        SetValueUtils.setMethodCreateValVoid(fileResource, itCode, date);
+        fileResourceMapper.add(fileResource);
+        String resultFileName = Objects.requireNonNull(fileName).substring(0, fileName.lastIndexOf(".")) + "_" + fileResource.getId() + "." + fileType;
+        String rootPath = "/www/pictures/";
+        String filePath = rootPath + resultFileName;
+        File directory = new File(filePath);
+        boolean isCreated = false;
         try {
-            String fileType = FileUtils.getFileType(file);
-            String fileName = file.getOriginalFilename();
-            FileResource fileResource = new FileResource();
-            fileResource.setFilePath(uploadPath);
-            fileResource.setSourceFileName(fileName);
-            SetValueUtils.setMethodCreateValVoid(fileResource, itCode, date);
-            fileResourceMapper.add(fileResource);
-            String resultFileName = Objects.requireNonNull(fileName).substring(0, fileName.lastIndexOf(".")) + "_" + fileResource.getId() + "." + fileType;
-            String rootPath = "/www/pictures/";
-            String filePath = rootPath + resultFileName;
-            File directory = new File(filePath);
-            boolean isCreated = directory.createNewFile();
+            isCreated = directory.createNewFile();
             //压缩并上传文件
             if (isCreated) {
                 log.info("File created: " + directory.getAbsolutePath());
@@ -123,23 +124,23 @@ public class FileResourceServiceImpl implements FileResourceService {
             }
             // 保存文件
             file.transferTo(Paths.get(filePath));
-            //Files.copy(file.getInputStream(), Paths.get(filePath));
-            fileResource.setFileName(resultFileName);
-            fileResourceMapper.update(fileResource);
-            //处理缩略图
-            String thumbnailImgName = ImageUtils.resizeBySize(rootPath, resultFileName, 200, 200, true);
-            FileResource thumbnailFileResource = new FileResource();
-            thumbnailFileResource.setFilePath(uploadPath);
-            thumbnailFileResource.setSourceFileName(resultFileName);
-            thumbnailFileResource.setFileName(thumbnailImgName);
-            SetValueUtils.setMethodCreateValVoid(thumbnailImgName, itCode, date);
-            fileResourceMapper.add(thumbnailFileResource);
-            vo.setFilePath(uploadPath);
-            vo.setFileName(thumbnailFileResource.getFileName());
-            vo.setSourceName(thumbnailFileResource.getSourceFileName());
         } catch (Exception e) {
             throw new BaseException("-999", e.getMessage());
         }
+        fileResource.setFileName(resultFileName);
+        fileResourceMapper.update(fileResource);
+        //处理缩略图
+        String thumbnailImgName = ImageUtils.resizeBySize(rootPath, resultFileName, 200, 200, true);
+        log.info("thumbnailImgName:{}", thumbnailImgName);
+        FileResource thumbnailFileResource = new FileResource();
+        thumbnailFileResource.setFilePath(uploadPath);
+        thumbnailFileResource.setSourceFileName(resultFileName);
+        thumbnailFileResource.setFileName(thumbnailImgName);
+        SetValueUtils.setMethodCreateValVoid(thumbnailFileResource, itCode, date);
+        fileResourceMapper.add(thumbnailFileResource);
+        vo.setFilePath(uploadPath);
+        vo.setFileName(thumbnailFileResource.getFileName());
+        vo.setSourceName(thumbnailFileResource.getSourceFileName());
         return GeneralResponse.success(vo);
     }
 
