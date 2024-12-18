@@ -240,11 +240,11 @@ public final class ImageUtils {
             double ratio = 0.0; // 缩放比例
 //			jpgfilePath = filePath.substring(0, filePath.lastIndexOf("."))
 //					+ "_" + height + "_" + width + ".jpg";
-            resultFileName = fileName.substring(0, filePath.lastIndexOf("."))
+            resultFileName = fileName.substring(0, fileName.lastIndexOf("."))
                     + "_thumbnail" + ".png";
             File f = new File(filePath + fileName);
             //File jpgf = new File(root_path + jpgfilePath);
-            File pngf = new File(resultFileName);
+            File pngf = new File(filePath + resultFileName);
             BufferedImage bi = ImageIO.read(f);
             if (width <= 0) {
                 width = bi.getWidth() * height / bi.getHeight();

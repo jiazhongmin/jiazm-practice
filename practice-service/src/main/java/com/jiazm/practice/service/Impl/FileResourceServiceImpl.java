@@ -132,6 +132,7 @@ public class FileResourceServiceImpl implements FileResourceService {
             thumbnailFileResource.setFilePath(uploadPath);
             thumbnailFileResource.setSourceFileName(resultFileName);
             thumbnailFileResource.setFileName(thumbnailImgName);
+            SetValueUtils.setMethodCreateValVoid(thumbnailImgName, itCode, date);
             fileResourceMapper.add(thumbnailFileResource);
             vo.setFilePath(uploadPath);
             vo.setFileName(thumbnailFileResource.getFileName());
