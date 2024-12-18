@@ -130,7 +130,7 @@ public class FileResourceServiceImpl implements FileResourceService {
             String thumbnailImgName = ImageUtils.resizeBySize(rootPath, resultFileName, 200, 200, true);
             FileResource thumbnailFileResource = new FileResource();
             thumbnailFileResource.setFilePath(uploadPath);
-            thumbnailFileResource.setSourceFileName(fileName);
+            thumbnailFileResource.setSourceFileName(resultFileName);
             thumbnailFileResource.setFileName(thumbnailImgName);
             fileResourceMapper.add(thumbnailFileResource);
             vo.setFilePath(uploadPath);
