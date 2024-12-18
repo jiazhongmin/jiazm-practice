@@ -1,9 +1,8 @@
 package com.jiazm.practice.entity;
 
 import lombok.Data;
-import java.math.BigDecimal;
+
 import java.util.Date;
-import lombok.Data;
 /**
  * fileResource
  *
@@ -15,6 +14,7 @@ public class FileResource{
 	    private Integer id;
         private String fileName;
         private String sourceFileName;
+        private String thumbnailFilePath;
         private String filePath;
         private String createBy;
         private Date createTime;

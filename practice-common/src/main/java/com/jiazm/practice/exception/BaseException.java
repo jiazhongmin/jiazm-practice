@@ -8,8 +8,8 @@ import org.slf4j.helpers.MessageFormatter;
 /**
  * 业务异常基类
  *
- * @author lilong10
- * @date 2019/03/19 16:41
+ * @author jiazm3
+ * @date 2024/12/18 16:41
  * copyright 2019 www.lenovo.com
  */
 @Data

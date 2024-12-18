@@ -2,9 +2,6 @@ package com.jiazm.practice.req.menulist;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * menuListModifyReq
  *
@@ -13,10 +10,10 @@ import java.util.Date;
  */
 @Data
 public class ModifyReq {
-	private Integer id;
-	private String foodName;
-	private String foodDesc;
-	private String foodLevel;
-
+    private Integer id;
+    private String foodName;
+    private String foodDesc;
+    private Integer foodLevel;
+    private String foodPictureUrl;
 }
 

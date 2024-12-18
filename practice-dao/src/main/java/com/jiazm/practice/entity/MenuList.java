@@ -1,9 +1,8 @@
 package com.jiazm.practice.entity;
 
 import lombok.Data;
-import java.math.BigDecimal;
+
 import java.util.Date;
-import lombok.Data;
 /**
  * menuList
  *
@@ -16,6 +15,7 @@ public class MenuList{
         private String foodName;
         private String foodDesc;
         private String foodLevel;
+        private String foodPictureUrl;
         private String createBy;
         private Date createTime;
         private String modifyBy;

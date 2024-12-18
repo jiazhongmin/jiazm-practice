@@ -1,6 +1,7 @@
 package com.jiazm.practice.service.Impl;
 
 import com.github.pagehelper.PageInfo;
+import com.jiazm.practice.ImageUtils;
 import com.jiazm.practice.commons.SetValueUtils;
 import com.jiazm.practice.entity.FileResource;
 import com.jiazm.practice.exception.BaseException;
@@ -23,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
@@ -109,18 +109,33 @@ public class FileResourceServiceImpl implements FileResourceService {
             SetValueUtils.setMethodCreateValVoid(fileResource, itCode, date);
             fileResourceMapper.add(fileResource);
             String resultFileName = Objects.requireNonNull(fileName).substring(0, fileName.lastIndexOf(".")) + "_" + fileResource.getId() + "." + fileType;
-            fileResource.setFileName(resultFileName);
-            fileResourceMapper.update(fileResource);
-            String filePath = "/www/pictures/" + fileResource.getFileName();
+            String rootPath = "/www/pictures/";
+            String filePath = rootPath + resultFileName;
             File directory = new File(filePath);
-            if (!directory.exists()) {
-                directory.mkdirs();
+            boolean isCreated = directory.createNewFile();
+            //压缩并上传文件
+            if (isCreated) {
+                log.info("File created: " + directory.getAbsolutePath());
+                Process process = Runtime.getRuntime().exec("chmod 755 " + directory.getAbsolutePath());
+                process.waitFor();
+            } else {
+                log.info("File already exists or could not be created");
             }
             // 保存文件
-            //file.transferTo(Paths.get(filePath));
-            Files.copy(file.getInputStream(), Paths.get(filePath));
+            file.transferTo(Paths.get(filePath));
+            //Files.copy(file.getInputStream(), Paths.get(filePath));
+            fileResource.setFileName(resultFileName);
+            fileResourceMapper.update(fileResource);
+            //处理缩略图
+            String thumbnailImgName = ImageUtils.resizeBySize(rootPath, resultFileName, 200, 200, true);
+            FileResource thumbnailFileResource = new FileResource();
+            thumbnailFileResource.setFilePath(uploadPath);
+            thumbnailFileResource.setSourceFileName(fileName);
+            thumbnailFileResource.setFileName(thumbnailImgName);
+            fileResourceMapper.add(thumbnailFileResource);
             vo.setFilePath(uploadPath);
-            vo.setFileName(fileName);
+            vo.setFileName(thumbnailFileResource.getFileName());
+            vo.setSourceName(thumbnailFileResource.getSourceFileName());
         } catch (Exception e) {
             throw new BaseException("-999", e.getMessage());
         }

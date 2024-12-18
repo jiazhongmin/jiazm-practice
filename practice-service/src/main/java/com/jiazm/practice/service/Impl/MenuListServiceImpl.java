@@ -90,17 +90,17 @@ public class MenuListServiceImpl implements MenuListService {
 
     private void verifyDataExist(ModifyReq req) {
         MenuList findMenuList = new MenuList();
-        //todo 添加条件
         findMenuList.setIsDeleted(0);
+        findMenuList.setFoodName(req.getFoodName());
         List<MenuList> menuListList = menuListMapper.findList(findMenuList);
         if (Objects.isNull(req.getId())) {
             if (CollectionUtils.isNotEmpty(menuListList)) {
-                throw new BaseException("-999", "这条记录已经存在!");
+                throw new BaseException("-999", "这个菜单已经存在!");
             }
         } else {
             List<MenuList> resultList = menuListList.stream().filter(menuList -> !menuList.getId().equals(req.getId())).collect(Collectors.toList());
             if (CollectionUtils.isNotEmpty(resultList)) {
-                throw new BaseException("-999", "这条记录已经存在!");
+                throw new BaseException("-999", "这个菜单已经存在!");
             }
         }
     }

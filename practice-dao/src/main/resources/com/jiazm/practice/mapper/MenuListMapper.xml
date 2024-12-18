@@ -9,6 +9,7 @@
 		<result column="food_name" property="foodName" />
 		<result column="food_desc" property="foodDesc" />
 		<result column="food_level" property="foodLevel" />
+		<result column="food_picture_url" property="foodPictureUrl" />
 		<result column="create_by" property="createBy" />
 		<result column="create_time" property="createTime" />
 		<result column="modify_by" property="modifyBy" />
@@ -18,7 +19,7 @@
 
 	<!-- menu_list 字段 -->
 	<sql id="Column_List">
-		menu_list.`id`,menu_list.`food_name`,menu_list.`food_desc`,menu_list.`food_level`,menu_list.`create_by`,menu_list.`create_time`,menu_list.`modify_by`,menu_list.`modify_time`,menu_list.`is_deleted`
+		menu_list.`id`,menu_list.`food_name`,menu_list.`food_desc`,menu_list.`food_level`,menu_list.`food_picture_url`,menu_list.`create_by`,menu_list.`create_time`,menu_list.`modify_by`,menu_list.`modify_time`,menu_list.`is_deleted`
 	</sql>
 
 	<!-- 查询条件 -->
@@ -33,8 +34,11 @@
 			<if test="foodDesc != null and foodDesc != ''">
 				and menu_list.`food_desc` = #{foodDesc}
 			</if>
-			<if test="foodLevel != null and foodLevel != ''">
+			<if test="foodLevel != null">
 				and menu_list.`food_level` = #{foodLevel}
+			</if>
+			<if test="foodPictureUrl != null and foodPictureUrl != ''">
+				and menu_list.`food_picture_url` = #{foodPictureUrl}
 			</if>
 			<if test="createBy != null and createBy != ''">
 				and menu_list.`create_by` = #{createBy}
@@ -55,22 +59,49 @@
 
 	<!-- 插入记录 -->
 	<insert id="add" parameterType="Object">
-		<selectKey resultType="java.lang.String" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID() 
-		</selectKey>
-		insert into menu_list(`food_name`,`food_desc`,`food_level`,`create_by`,`create_time`,`modify_by`,`modify_time`,`is_deleted`)	 values(#{foodName},#{foodDesc},#{foodLevel},#{createBy},#{createTime},#{modifyBy},#{modifyTime},#{isDeleted})
+		insert into menu_list(`food_name`,`food_desc`,`food_level`,`food_picture_url`,`create_by`,`create_time`,`modify_by`,`modify_time`,`is_deleted`)
+	 values(#{foodName},#{foodDesc},#{foodLevel},#{foodPictureUrl},#{createBy},#{createTime},#{modifyBy},#{modifyTime},#{isDeleted})
 	</insert>
     <!-- 批量插入 -->
 	<insert id="insertList" parameterType="java.util.List">
-        INSERT INTO menu_list ("id","food_name","food_desc","food_level","create_by","create_time","modify_by","modify_time","is_deleted")
+        INSERT INTO menu_list ("id","food_name","food_desc","food_level",`food_picture_url`,"create_by","create_time","modify_by","modify_time","is_deleted")
         VALUES
         <foreach collection="list" item="val" index="index" separator=",">
-            (#{val.id},#{val.foodName},#{val.foodDesc},#{val.foodLevel},#{val.createBy},#{val.createTime},#{val.modifyBy},#{val.modifyTime},#{val.isDeleted})
+            (#{val.id},#{val.foodName},#{val.foodDesc},#{val.foodLevel},#{val.foodPictureUrl},#{val.createBy},#{val.createTime},#{val.modifyBy},#{val.modifyTime},#{val.isDeleted})
         </foreach>
     </insert>
 	<!-- 根据id，修改记录 -->
 	<update id="update" parameterType="Object">
-		update menu_list set 	    <trim  suffixOverrides="," >	        <if test="foodName != null ">	            `food_name`=#{foodName},	        </if>	        <if test="foodDesc != null ">	            `food_desc`=#{foodDesc},	        </if>	        <if test="foodLevel != null ">	            `food_level`=#{foodLevel},	        </if>	        <if test="createBy != null ">	            `create_by`=#{createBy},	        </if>	        <if test="createTime != null ">	            `create_time`=#{createTime},	        </if>	        <if test="modifyBy != null ">	            `modify_by`=#{modifyBy},	        </if>	        <if test="modifyTime != null ">	            `modify_time`=#{modifyTime},	        </if>	        <if test="isDeleted != null ">	            `is_deleted`=#{isDeleted},	        </if>	    </trim> where `id`=#{id}
+		update menu_list set 
+	    <trim  suffixOverrides="," >
+	        <if test="foodName != null ">
+	            `food_name`=#{foodName},
+	        </if>
+	        <if test="foodDesc != null ">
+	            `food_desc`=#{foodDesc},
+	        </if>
+	        <if test="foodLevel != null ">
+	            `food_level`=#{foodLevel},
+	        </if>
+	        <if test="foodPictureUrl != null ">
+	            `food_picture_url`=#{foodPictureUrl},
+	        </if>
+	        <if test="createBy != null ">
+	            `create_by`=#{createBy},
+	        </if>
+	        <if test="createTime != null ">
+	            `create_time`=#{createTime},
+	        </if>
+	        <if test="modifyBy != null ">
+	            `modify_by`=#{modifyBy},
+	        </if>
+	        <if test="modifyTime != null ">
+	            `modify_time`=#{modifyTime},
+	        </if>
+	        <if test="isDeleted != null ">
+	            `is_deleted`=#{isDeleted},
+	        </if>
+	    </trim> where `id`=#{id}
 	</update>
 	<!-- 逻辑删除记录 -->
 	<update id="isDelete" parameterType="Object">
