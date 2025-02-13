@@ -1,7 +1,7 @@
 package com.jiazm.practice.req.menulist;
 
-import javax.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.util.List;
 /**
  * menuListListReq
@@ -13,10 +13,8 @@ import java.util.List;
 public class ListReq {
 	private List<String> foodNames;
 	private List<String> foodDescs;
-	private List<String> foodLevels;
-    @NotNull(message = "页码不能为空")
+	private List<Integer> foodLevels;
     private Integer pageNum;
-    @NotNull(message = "每页条数不能为空")
     private Integer pageSize;
 }
 

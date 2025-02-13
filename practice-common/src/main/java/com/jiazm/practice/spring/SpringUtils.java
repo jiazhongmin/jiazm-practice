@@ -48,7 +48,7 @@ public final class SpringUtils implements ApplicationContextAware, DisposableBea
      * @return 实例
      */
     public static Object getBean(String name) {
-        Assert.hasText(name);
+        Assert.hasText(name,"");
         return applicationContext.getBean(name);
     }
 
@@ -60,8 +60,8 @@ public final class SpringUtils implements ApplicationContextAware, DisposableBea
      * @return 实例
      */
     public static <T> T getBean(String name, Class<T> type) {
-        Assert.hasText(name);
-        Assert.notNull(type);
+        Assert.hasText(name,"");
+        Assert.notNull(type,"");
         return applicationContext.getBean(name, type);
     }
 
@@ -72,7 +72,7 @@ public final class SpringUtils implements ApplicationContextAware, DisposableBea
      * @return
      */
     public static <T> T getBean(Class<T> requiredType) {
-        Assert.notNull(requiredType);
+        Assert.notNull(requiredType,"");
         return applicationContext.getBean(requiredType);
     }
 
@@ -83,7 +83,7 @@ public final class SpringUtils implements ApplicationContextAware, DisposableBea
      * @return 实例
      */
     public static <T> Map<String, T> getBeanMap(Class<T> requiredType) {
-        Assert.notNull(requiredType);
+        Assert.notNull(requiredType,"");
         return applicationContext.getBeansOfType(requiredType);
     }
 

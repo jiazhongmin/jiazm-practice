@@ -12,17 +12,20 @@ import java.util.Date;
  */
 @Data
 public class MenuListVo {
-	private static final long serialVersionUID = 1L;
-	
-	private Integer id;
-	private String foodName;
-	private String foodDesc;
-	private String foodLevel;
-	private String createBy;
-	private Date createTime;
-	private String modifyBy;
-	private Date modifyTime;
-	private Integer isDeleted;
+    private static final long serialVersionUID = 1L;
+
+    private Integer id;
+    private String foodName;
+    private String foodDesc;
+    private Integer foodLevel;
+    private String foodPictureUrl;
+    private String createBy;
+    private Date createTime;
+    private String createTimeStr;
+    private String modifyBy;
+    private Date modifyTime;
+    private String modifyTimeStr;
+    private Integer isDeleted;
 
 }
 

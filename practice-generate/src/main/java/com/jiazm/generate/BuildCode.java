@@ -15,7 +15,7 @@ public class BuildCode {
 
     public static void main(String[] args) {
         List<Table> tableList = Lists.newArrayList();
-        tableList.add(new Table("file_resource", "fileResource", "fileResource", "jiazm-practice", true));
+        tableList.add(new Table("menu_level", "menuLevel", "menuLevel", "jiazm-practice", false));
         BuildCodeUtil.build(tableList);
     }
 }

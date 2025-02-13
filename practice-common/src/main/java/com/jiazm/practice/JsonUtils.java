@@ -63,8 +63,8 @@ public final class JsonUtils {
      * @return 对象
      */
     public static <T> T toObject(String json, Class<T> valueType) {
-        Assert.hasText(json);
-        Assert.notNull(valueType);
+        Assert.hasText(json,"");
+        Assert.notNull(valueType,"");
         try {
             return mapper.readValue(json, valueType);
         } catch (Exception e) {
@@ -81,8 +81,8 @@ public final class JsonUtils {
      * @return 对象
      */
     public static <T> T toObject(String json, TypeReference<T> typeReference) {
-        Assert.hasText(json);
-        Assert.notNull(typeReference);
+        Assert.hasText(json,"");
+        Assert.notNull(typeReference,"");
         try {
             return mapper.readValue(json, typeReference);
         } catch (Exception e) {
@@ -99,8 +99,8 @@ public final class JsonUtils {
      * @return 对象
      */
     public static <T> T toObject(String json, JavaType javaType) {
-        Assert.hasText(json);
-        Assert.notNull(javaType);
+        Assert.hasText(json,"");
+        Assert.notNull(javaType,"");
         try {
             return mapper.readValue(json, javaType);
         } catch (Exception e) {

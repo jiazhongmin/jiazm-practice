@@ -5,7 +5,7 @@ import com.jiazm.practice.entity.UserLog;
 import com.jiazm.practice.mapper.UserLogMapper;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @Author jiazhongmin

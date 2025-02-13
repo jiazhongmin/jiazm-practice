@@ -85,7 +85,7 @@ public class CryptoUtil {
 //        String encryptStr = encrypt(content);
 //        System.out.println("原始内容：" + content);
 //        System.out.println("加密内容：" + encryptStr);
-        System.out.println("解密内容：" + decrypt("hEoCK+PzfncDSAeJ/jXhLJIUSdmDGCr+"));
+        System.out.println("解密内容：" + decrypt("oShyUf7ochbpixhHxQJwu4gDhPY9dcgc0w=="));
         System.out.println("加密内容: "+encrypt("ld612522"));
     }
 }

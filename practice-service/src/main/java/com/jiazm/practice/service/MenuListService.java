@@ -4,9 +4,10 @@ import com.jiazm.practice.req.menulist.DeleteReq;
 import com.jiazm.practice.req.menulist.ListReq;
 import com.jiazm.practice.req.menulist.ModifyReq;
 import com.jiazm.practice.response.GeneralResponse;
-import com.jiazm.practice.vo.UploadImageVo;
+import com.jiazm.practice.vo.DictVo;
 import com.jiazm.practice.vo.menulist.MenuListListVo;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * menuList Service
@@ -37,4 +38,5 @@ public interface MenuListService{
   	 */
      GeneralResponse<String> del(DeleteReq req);
 
+    GeneralResponse<List<DictVo>> menuLevel();
 }

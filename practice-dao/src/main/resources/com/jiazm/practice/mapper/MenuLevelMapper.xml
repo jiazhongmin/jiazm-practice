@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiazm.practice.mapper.MenuLevelMapper">
+	<!-- Result Map -->
+	<resultMap id="ResultMap" type="com.jiazm.practice.entity.MenuLevel">
+		<result column="id" property="id" />
+		<result column="type_name" property="typeName" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="modify_by" property="modifyBy" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_deleted" property="isDeleted" />
+	</resultMap>
+
+	<!-- menu_level 字段 -->
+	<sql id="Column_List">
+		menu_level.`id`,menu_level.`type_name`,menu_level.`create_by`,menu_level.`create_time`,menu_level.`modify_by`,menu_level.`modify_time`,menu_level.`is_deleted`
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+			<if test="id != null">
+				and menu_level.`id` = #{id}
+			</if>
+			<if test="typeName != null and typeName != ''">
+				and menu_level.`type_name` = #{typeName}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				and menu_level.`create_by` = #{createBy}
+			</if>
+			<if test="createTime != null">
+				and menu_level.`create_time` = #{createTime}
+			</if>
+			<if test="modifyBy != null and modifyBy != ''">
+				and menu_level.`modify_by` = #{modifyBy}
+			</if>
+			<if test="modifyTime != null">
+				and menu_level.`modify_time` = #{modifyTime}
+			</if>
+			<if test="isDeleted != null">
+				and menu_level.`is_deleted` = #{isDeleted}
+			</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object">
+		<selectKey resultType="java.lang.String" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() 
+		</selectKey>
+		insert into menu_level(`type_name`,`create_by`,`create_time`,`modify_by`,`modify_time`,`is_deleted`)	 values(#{typeName},#{createBy},#{createTime},#{modifyBy},#{modifyTime},#{isDeleted})
+	</insert>
+    <!-- 批量插入 -->
+	<insert id="insertList" parameterType="java.util.List">
+        INSERT INTO menu_level ("id","type_name","create_by","create_time","modify_by","modify_time","is_deleted")
+        VALUES
+        <foreach collection="list" item="val" index="index" separator=",">
+            (#{val.id},#{val.typeName},#{val.createBy},#{val.createTime},#{val.modifyBy},#{val.modifyTime},#{val.isDeleted})
+        </foreach>
+    </insert>
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update menu_level set 	    <trim  suffixOverrides="," >	        <if test="typeName != null ">	            `type_name`=#{typeName},	        </if>	        <if test="createBy != null ">	            `create_by`=#{createBy},	        </if>	        <if test="createTime != null ">	            `create_time`=#{createTime},	        </if>	        <if test="modifyBy != null ">	            `modify_by`=#{modifyBy},	        </if>	        <if test="modifyTime != null ">	            `modify_time`=#{modifyTime},	        </if>	        <if test="isDeleted != null ">	            `is_deleted`=#{isDeleted},	        </if>	    </trim> where `id`=#{id}
+	</update>
+	<!-- 逻辑删除记录 -->
+	<update id="isDelete" parameterType="Object">
+		update menu_level set is_deleted = 1 where id = #{id}
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="findById" resultMap="ResultMap" parameterType="Object">
+		select <include refid="Column_List" /> from menu_level where `id` = #{id}
+	</select>
+	<!-- 查询列表 -->
+	<select id="findList" resultMap="ResultMap"
+		parameterType="Object">
+		select 
+		<include refid="Column_List" />
+		from menu_level 
+		<include refid="Example_Where_Clause" />
+	    order by modify_time DESC
+	</select>
+	<select id = "selectByCondition"  resultMap="ResultMap" parameterType="com.jiazm.practice.req.menulevel.ListReq">
+	    select * from menu_level where is_deleted = 0
+            <if test="req.typeNames != null and req.typeNames.size() > 0">
+                and menu_level.`type_name` in
+                <foreach item="item" collection="req.typeNames" separator="," open="(" close=")" index="index">
+                   #{item}
+                </foreach>
+            </if>
+    order by modify_time DESC
+	</select>
+</mapper>   

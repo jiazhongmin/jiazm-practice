@@ -1,16 +1,17 @@
 package com.jiazm.practice.service.handler;
 
-import com.alibaba.fastjson.JSON;
-import com.jiazm.practice.entity.WebsocketMessage;
+import com.jiazm.practice.exception.BaseException;
 import com.jiazm.practice.service.UserLogService;
-import com.jiazm.practice.service.UserService;
+import jakarta.annotation.Resource;
+import jakarta.websocket.*;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,13 +27,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
 @ServerEndpoint("/websocket/{itCode}")
 public class WebsocketHandler {
-    private static UserService userService;
+    private static OllamaChatModel ollamaChatModel;
     private static UserLogService userLogService;
     private Session session;
+
     //记录日志
     @Resource
-    public void setUserService(UserService userService) {
-        WebsocketHandler.userService = userService;
+    public void setOllamaChatModel(OllamaChatModel ollamaChatModel) {
+        WebsocketHandler.ollamaChatModel = ollamaChatModel;
     }
 
     @Resource
@@ -82,18 +84,45 @@ public class WebsocketHandler {
      * @param
      */
     @OnMessage
-    public void onMessage(@PathParam("itCode") String itCode, String message) {
-
+    public void onMessage(String message, Session session) {
         log.info("【websocket消息】收到客户端消息:" + message);
-            WebsocketMessage toMessage = JSON.parseObject(message, WebsocketMessage.class);
-            //根据message中的to属性获取接收消息的用户的session，利用其session将消息转发过去
-            Session toSession = sessionPool.get(toMessage.getTo());
-            // 将消息转发给to的人
-            try {
-                toSession.getBasicRemote().sendText(toMessage.getMsg());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        Prompt prompt = new Prompt(new UserMessage(message));
+        try {
+            String content = ollamaChatModel.call(prompt).getResult().getOutput().getContent();
+            log.info(content);
+            session.getBasicRemote().sendText(content);
+        } catch (IOException e) {
+            throw new BaseException("-999", e.getMessage());
+        }
+        //逐字返回信息
+//        CompletableFuture.supplyAsync(() -> ollamaChatModel.call(prompt))
+//                .thenAccept(response -> {
+//                    // 逐字输出响应
+//                    for (char c : response.getResult().getOutput().getContent().toCharArray()) {
+//                        try {
+//                            session.getBasicRemote().sendText(String.valueOf(c));
+//                            System.out.print(c);
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        try {
+//                            // 控制输出速度，这里使用50毫秒间隔
+//                            Thread.sleep(50);
+//                        } catch (InterruptedException e) {
+//                            Thread.currentThread().interrupt();
+//                        }
+//                    }
+//                    try {
+//                        session.getBasicRemote().sendText("[DONE]");
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    System.out.println(); // 换行
+//                })
+//                .exceptionally(ex -> {
+//                    System.err.println("Error occurred: " + ex.getMessage());
+//                    return null;
+//                });
     }
 
     /**

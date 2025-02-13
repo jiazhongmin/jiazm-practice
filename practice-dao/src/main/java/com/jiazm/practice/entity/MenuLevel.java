@@ -1,21 +1,19 @@
 package com.jiazm.practice.entity;
 
 import lombok.Data;
-
+import java.math.BigDecimal;
 import java.util.Date;
+import lombok.Data;
 /**
- * menuList
+ * menuLevel
  *
  * @author jiazm3
- * @date 2024-11-15 16:13:50
+ * @date 2025-01-15 16:34:59
  */
 @Data
-public class MenuList{
+public class MenuLevel{
 	    private Integer id;
-        private String foodName;
-        private String foodDesc;
-        private Integer foodLevel;
-        private String foodPictureUrl;
+        private String typeName;
         private String createBy;
         private Date createTime;
         private String modifyBy;

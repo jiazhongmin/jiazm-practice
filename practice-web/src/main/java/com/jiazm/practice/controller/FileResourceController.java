@@ -1,18 +1,17 @@
 package com.jiazm.practice.controller;
 
-import com.jiazm.practice.service.FileResourceService;
-import javax.annotation.Resource;
-
-import com.jiazm.practice.vo.UploadImageVo;
-import org.springframework.web.bind.annotation.*;
-import com.jiazm.practice.req.fileresource.*;
-import com.jiazm.practice.vo.fileresource.*;
+import com.jiazm.practice.req.fileresource.DeleteReq;
+import com.jiazm.practice.req.fileresource.ListReq;
+import com.jiazm.practice.req.fileresource.ModifyReq;
 import com.jiazm.practice.response.GeneralResponse;
+import com.jiazm.practice.service.FileResourceService;
+import com.jiazm.practice.vo.UploadImageVo;
+import com.jiazm.practice.vo.fileresource.FileResourceListVo;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.annotation.Resource;
 import javax.validation.Valid;
-
-import java.util.List;
 
 /**
  * fileResource Controller

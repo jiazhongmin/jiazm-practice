@@ -68,7 +68,7 @@ public final class MessageUtils implements ApplicationContextAware, DisposableBe
      * @return 国际化消息
      */
     public static String getMessage(String code, Locale locale, Object... args) {
-        Assert.hasText(code);
+        Assert.hasText(code,"");
         return applicationContext.getMessage(code, args, locale);
     }
 
